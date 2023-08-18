@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr" layout:decorate="~{layout}">
+
+<head>
+    <title layout:fragment="title">Ajouter une formation</title>
+    <script th:src="@{/js/reset_form.js}"></script>
+</head>
+
+<body>
+    <main layout:fragment="content">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <h2 class="mb-4">Ajouter une formation pour "<span th:text="${skill.name}"></span>"</h2>
+
+                    <form th:action="@{/trainings/{skillId}/addTraining(skillId=${skill.id})}" th:object="${training}"
+                        method="POST">
+                        <div th:if="${errors != null and #fields.hasErrors('*')}" class="alert alert-danger">
+                            <p>Des erreurs ont été détectées :</p>
+                            <ul>
+                                <li th:each="err : ${errors.allErrors}" th:text="${err.getDefaultMessage()}"></li>
+                            </ul>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="scheduled">Date de la formation</label>
+                            <input type="date" id="scheduled" name="scheduled" th:field="*{scheduled}"
+                                class="form-control">
+                            <div class="text-danger mt-2" th:if="${#fields.hasErrors('scheduled')}"
+                                th:errors="*{scheduled}"></div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="employee">Employé concerné</label>
+                            <select name="employee" id="employee" th:field="*{employee}" required class="form-control">
+                                <option id="defaultOption" value="" selected disabled>Choisir un employé</option>
+                                <option th:each="employee : ${employeesList}" th:value="${employee.id}"
+                                    th:text="${employee.name}"></option>
+                            </select>
+                            <div class="text-danger mt-2" th:if="${#fields.hasErrors('employee')}"
+                                th:errors="*{employee}"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                        <button type="button" class="btn btn-secondary ml-2 btn-reset">Réinitialiser les champs</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
